@@ -150,7 +150,6 @@ const showInfo = ref(false);
 }
 
 .btn-pixel-start:hover { background-color: #8c3641; }
-.btn-pixel-start:active { top: 4px; box-shadow: none; }
 
 .pixel-modal-overlay {
   position: fixed;
