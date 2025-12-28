@@ -70,6 +70,7 @@ const showInfo = ref(false);
 .pixel-screen {
   position: relative;
   width: 100%;
+  height: 630px;
   background-color: #efead8;
   border: 8px solid #000;
   box-shadow: 0 0 0 4px #fff inset, 10px 10px 0px rgba(0,0,0,0.2);
@@ -112,7 +113,7 @@ const showInfo = ref(false);
   font-family: 'Jersey 10';
   font-size: 1.2rem;
   color: #a64452;
-  margin-top: 40px;
+  margin-top: 50px;
   letter-spacing: 2px;
 }
 
@@ -120,13 +121,13 @@ const showInfo = ref(false);
   font-family: 'Jersey 10';
   font-size: 3.5rem;
   color: #000;
-  margin: 10px 0 50px 0;
+  margin: 10px 0 70px 0;
   line-height: 1;
 }
 
 .pixel-icon {
-  font-size: 3rem;
-  margin: 25px 0;
+  font-size: 4rem;
+  margin: 40px 0;
   animation: bounce 1s infinite;
 }
 
@@ -136,7 +137,7 @@ const showInfo = ref(false);
 }
 
 .btn-pixel-start {
-  margin-top: 40px;
+  margin-top: 30px;
   background-color: #a64452;
   color: #fff;
   padding: 10px 50px;
@@ -220,7 +221,7 @@ const showInfo = ref(false);
 }
 
 .pixel-footer {
-  margin-top: 50px;
+  margin-top: 70px;
   font-family: 'Jersey 10';
   font-size: 0.9rem;
   color: #938a67;
