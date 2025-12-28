@@ -1,46 +1,56 @@
 <template>
-  <div class="input-container">
-    <div class="form-card">
-      <h2 class="title">정보 입력</h2>
-      <p class="subtitle">사주 분석을 위해 정확한 정보를 입력해주세요.</p>
+  <div class="pixel-container">
+    <div class="pixel-screen">
+      <button class="pixel-back-btn" @click="$router.push('/')">◀</button>
 
-      <div class="input-group">
-        <label>생년월일</label>
-        <div class="birth-inputs">
-          <input v-model="year" type="number" placeholder="YYYY" class="birth-input" />
-          <input v-model="month" type="number" placeholder="MM" class="birth-input" />
-          <input v-model="day" type="number" placeholder="DD" class="birth-input" />
+      <div class="form-card">
+        <h2 class="pixel-title">ENTER INFO</h2>
+        <p class="pixel-subtitle">분석을 위한 정보를 입력해주세요.</p>
+
+        <div class="input-group">
+          <label class="pixel-label">BIRTH DATE</label>
+          <div class="birth-inputs">
+            <input v-model="year" type="number" placeholder="YYYY" class="pixel-input" />
+            <input v-model="month" type="number" placeholder="MM" class="pixel-input" />
+            <input v-model="day" type="number" placeholder="DD" class="pixel-input" />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="pixel-label">BIRTH TIME</label>
+          <div class="pixel-select-wrapper">
+            <select v-model="branch" class="pixel-select">
+              <option v-for="b in branches" :key="b.key" :value="b.key">
+                {{ b.label }}
+              </option>
+            </select>
+            <div class="pixel-arrow"></div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="pixel-label">GENDER</label>
+          <div class="gender-group">
+            <label class="pixel-radio" :class="{ active: gender === '남성' }">
+              <input type="radio" v-model="gender" value="남성" /> MALE
+            </label>
+            <label class="pixel-radio" :class="{ active: gender === '여성' }">
+              <input type="radio" v-model="gender" value="여성" /> FEMALE
+            </label>
+          </div>
+        </div>
+
+        <div class="pixel-actions">
+          <button class="submit-btn" @click="submit" :disabled="loading">
+            {{ loading ? 'LOADING...' : 'ANALYZE' }}
+          </button>
         </div>
       </div>
 
-      <div class="input-group">
-        <label>태어난 시간 (지시)</label>
-        <select v-model="branch" class="full-select">
-          <option v-for="b in branches" :key="b.key" :value="b.key">
-            {{ b.label }}
-          </option>
-        </select>
-      </div>
-
-      <div class="input-group">
-        <label>성별</label>
-        <div class="gender-group">
-          <label class="radio-label" :class="{ active: gender === '남성' }">
-            <input type="radio" v-model="gender" value="남성" /> 남성
-          </label>
-          <label class="radio-label" :class="{ active: gender === '여성' }">
-            <input type="radio" v-model="gender" value="여성" /> 여성
-          </label>
-        </div>
-      </div>
-
-      <button class="submit-btn" @click="submit" :disabled="loading">
-        {{ loading ? '분석 중...' : '결과 보기' }}
-      </button>
+      <p class="pixel-footer">© Hyojin Lee</p>
     </div>
   </div>
 </template>
-
 
 <script setup>
 import { ref } from 'vue'
@@ -49,13 +59,14 @@ import axios from 'axios'
 
 const router = useRouter()
 const loading = ref(false)
-const gender = ref('')
+const gender = ref('남성')
 const year = ref('')
 const month = ref('')
 const day = ref('')
-const branch = ref('자')
+const branch = ref('')
 
 const branches = [
+  { label: 'Select your birth time', key: ''},
   { label: '子(자) 23:30 ~ 01:29', key: '자' },
   { label: '丑(축) 01:30 ~ 03:29', key: '축' },
   { label: '寅(인) 03:30 ~ 05:29', key: '인' },
@@ -67,7 +78,8 @@ const branches = [
   { label: '申(신) 15:30 ~ 17:29', key: '신' },
   { label: '酉(유) 17:30 ~ 19:29', key: '유' },
   { label: '戌(술) 19:30 ~ 21:29', key: '술' },
-  { label: '亥(해) 21:30 ~ 23:29', key: '해' }
+  { label: '亥(해) 21:30 ~ 23:29', key: '해' },
+  { label: 'Unknown (시간 모름)', key: 'unknown' }
 ]
 
 const branchHourMap = {
@@ -76,14 +88,21 @@ const branchHourMap = {
 }
 
 async function submit() {
-  if (!year.value || !month.value || !day.value) {
-    alert('날짜를 모두 입력해주세요.'); 
+  if (!year.value || !month.value || !day.value || !branch.value) {
+    alert('Please enter all dates.'); 
     return;
   }
   loading.value = true;
   
-  const [hour, minute] = branchHourMap[branch.value].split(':');
-  const birthDateTime = `${year.value}-${String(month.value).padStart(2, '0')}-${String(day.value).padStart(2, '0')}T${hour}:${minute}:00`;
+  const dateStr = `${year.value}-${String(month.value).padStart(2, '0')}-${String(day.value).padStart(2, '0')}`;
+  let birthDateTime = "";
+
+  if (branch.value === 'unknown') {
+    birthDateTime = dateStr;
+  } else {
+    const [hour, minute] = branchHourMap[branch.value].split(':');
+    birthDateTime = `${dateStr}T${hour}:${minute}:00`;
+  }
 
   try {
     const response = await axios.post('http://localhost:8000/api/saju/filter', {
@@ -98,142 +117,190 @@ async function submit() {
     });
   } catch (error) {
     console.error(error);
-    alert('백엔드 서버(8000포트) 연결에 실패했습니다.');
+    alert('Server connection failed.');
   } finally {
     loading.value = false;
   }
 }
 </script>
 
-
 <style scoped>
-* {
-  box-sizing: border-box;
-}
+@import url('https://fonts.googleapis.com/css2?family=Jersey+10&family=Pixelify+Sans:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
 
-.input-container {
-  width: 100%;
+.pixel-container {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #bdb595;
   display: flex;
+  align-items: center;
   justify-content: center;
   padding: 20px;
 }
 
-.form-card {
+.pixel-screen {
+  position: relative;
   width: 100%;
-  max-width: 350px;
-  background: white;
-  padding: 30px 20px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(108, 92, 231, 0.15); /* 보라색 톤 그림자 */
+  height: 630px;
+  background-color: #efead8;
+  border: 8px solid #000;
+  box-shadow: 0 0 0 4px #fff inset, 10px 10px 0px rgba(0,0,0,0.2);
+  padding: 40px 20px;
   text-align: center;
 }
 
-.title {
-  margin-bottom: 8px;
-  color: #2d3436;
-  font-size: 1.5rem;
+.pixel-back-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 30px;
+  height: 30px;
+  background: #fff;
+  border: 3px solid #000;
+  font-family: 'Jersey 10';
+  cursor: pointer;
+  box-shadow: 3px 3px 0 #000;
 }
 
-.subtitle {
-  color: #b2bec3;
+.pixel-title {
+  font-family: 'Jersey 10';
+  font-size: 2.5rem;
+  color: #000;
+  margin: 10px 0 5px 0;
+}
+
+.pixel-subtitle {
+  font-family: 'Noto Sans KR';
+  font-size: 0.8rem;
+  color: #a64452;
   margin-bottom: 30px;
-  font-size: 0.85rem;
 }
 
 .input-group {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
   text-align: left;
 }
 
-label {
+.pixel-label {
   display: block;
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #636e72;
-  font-size: 0.9rem;
+  font-family: 'Jersey 10';
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  color: #000;
 }
 
-/* 2. 날짜 입력칸 3개 한 줄 정렬 핵심 코드 */
+.pixel-input {
+  width: 100%;
+  background: #fff;
+  border: 3px solid #000;
+  padding: 10px;
+  font-family: 'Jersey 10';
+  font-size: 1.2rem;
+  outline: none;
+  box-shadow: 3px 3px 0 #bdb595;
+}
+
 .birth-inputs {
   display: flex;
-  gap: 8px; /* 입력칸 사이 간격 */
+  gap: 8px;
 }
 
-.birth-input {
-  flex: 1; /* 3등분 */
-  min-width: 0; /* 중요: 내용물 때문에 늘어나는 것 방지 */
-  padding: 12px 5px;
-  text-align: center;
-  border: 2px solid #f1f2f6;
-  border-radius: 10px;
-  outline: none;
-  transition: 0.3s;
-}
-
-.birth-input:focus {
-  border-color: #6c5ce7;
-}
-
-/* 3. 셀렉트 박스 디자인 */
-.full-select {
+.pixel-select-wrapper {
+  position: relative;
   width: 100%;
-  padding: 12px;
-  border: 2px solid #f1f2f6;
-  border-radius: 10px;
-  outline: none;
-  background: #fdfbff;
 }
 
-/* 4. 성별 라디오 버튼 디자인 */
+.pixel-select {
+  width: 100%;
+  background: #fff;
+  border: 3px solid #000;
+  padding: 10px;
+  font-family: 'Noto Sans KR';
+  font-size: 0.9rem;
+  outline: none;
+  box-shadow: 3px 3px 0 #bdb595;
+  /* 기본 화살표 제거 (브라우저 표준) */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.pixel-arrow {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 8px;
+  background-color: #000;
+  clip-path: polygon(
+    0% 0%, 100% 0%, 
+    100% 40%, 80% 40%, 
+    80% 70%, 60% 70%, 
+    60% 100%, 40% 100%, 
+    40% 70%, 20% 70%, 
+    20% 40%, 0% 40%
+  );
+  pointer-events: none;
+}
+
 .gender-group {
   display: flex;
   gap: 10px;
 }
 
-.radio-label {
+.pixel-radio {
   flex: 1;
-  padding: 12px;
-  border: 2px solid #f1f2f6;
-  border-radius: 10px;
+  background: #fff;
+  border: 3px solid #000;
+  padding: 10px;
   text-align: center;
   cursor: pointer;
-  transition: 0.3s;
-  color: #b2bec3;
-  font-weight: bold;
+  font-family: 'Jersey 10';
+  font-size: 1.1rem;
+  color: #888;
+  box-shadow: 3px 3px 0 #bdb595;
 }
 
-.radio-label.active {
-  border-color: #6c5ce7;
-  color: #6c5ce7;
-  background: #f8f7ff;
+.pixel-radio.active {
+  background: #a64452;
+  color: #fff;
+  box-shadow: 3px 3px 0 #000;
 }
 
-.radio-label input {
-  display: none; /* 실제 라디오 버튼은 숨김 */
+.pixel-radio input {
+  display: none;
 }
 
-/* 5. 버튼 디자인 복구 */
 .submit-btn {
   width: 100%;
-  padding: 16px;
-  background: #6c5ce7; /* 메인 보라색 */
-  color: white;
+  margin-top: 30px;
+  background-color: #000;
+  color: #fff;
+  padding: 10px;
+  font-size: 1.8rem;
+  font-family: 'Jersey 10';
   border: none;
-  border-radius: 12px;
-  font-size: 1.1rem;
-  font-weight: bold;
   cursor: pointer;
-  transition: 0.3s;
-  box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+  box-shadow: -4px 0 0 0 #000, 4px 0 0 0 #000, 0 -4px 0 0 #000, 0 4px 0 0 #000;
+  transition: 0.1s;
 }
 
 .submit-btn:hover:not(:disabled) {
-  background: #5849d4;
-  transform: translateY(-2px);
+  background-color: #a64452;
 }
 
 .submit-btn:disabled {
-  background: #a29bfe;
+  background-color: #938a67;
   cursor: not-allowed;
+}
+
+.pixel-footer {
+  margin-top: 40px;
+  font-family: 'Jersey 10';
+  font-size: 0.9rem;
+  color: #938a67;
 }
 </style>
