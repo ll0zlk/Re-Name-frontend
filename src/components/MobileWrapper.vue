@@ -9,13 +9,12 @@
 <style scoped>
 .outer {
   min-height: 100vh;
-  background: #eee;
+  background: #dfe6ecc2;
 }
 
 .mobile {
-  max-width: 390px;
+  max-width: 450px;
   min-height: 100vh;
   margin: 0 auto;
-  background: white;
 }
 </style>
