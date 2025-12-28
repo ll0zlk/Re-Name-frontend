@@ -1,57 +1,77 @@
 <template>
-    <div class="result-container" v-if="nameInfo">
-        <div id="saving-image" class="result-card-wrapper">
-        <div class="header-section">
-            <span class="badge">추천 완료</span>
-            <h2 class="title">당신을 위한 최고의 이름</h2>
-        </div>
+    <div class="pixel-container" v-if="nameInfo">
+        <div class="pixel-screen">
+            <button class="pixel-back-btn" @click="$router.push('/input')">◀</button>
 
-        <div class="name-card">
-            <div class="card-top">
-            <p class="pronunciation">{{ nameInfo.pronunciation }}</p>
-            <h1 class="hanja">{{ nameInfo.hanja }}</h1>
-            <p class="hangeul">{{ nameInfo.name }}</p>
-            </div>
-
-            <div class="card-divider">
-            <div class="circle left"></div>
-            <div class="line"></div>
-            <div class="circle right"></div>
-            </div>
-
-            <div class="details">
-            <div class="detail-item">
-                <span class="label">의미</span>
-                <p class="value primary">{{ nameInfo.meaning }}</p>
-            </div>
-            <div class="grid-details">
-                <div class="detail-item">
-                <span class="label">오행 요소</span>
-                <p class="value">{{ nameInfo.element }}</p>
+            <div id="saving-image" class="result-card-pixel">
+                <div class="pixel-corner tl"></div>
+                <div class="pixel-corner tr"></div>
+                
+                <div class="header-section">
+                    <h2 class="pixel-title">YOUR KOREAN NAME</h2>
+                    <p class="pixel-subtitle-ko">당신의 새로운 이름</p>
                 </div>
+
+                <div class="name-display-area">
+                    <p class="pixel-pronunciation">{{ nameInfo.pronunciation }}</p>
+                    <div class="hanja-box">
+                        <h1 class="hanja-main">{{ nameInfo.hanja }}</h1>
+                    </div>
+                    <p class="hangeul-main">{{ nameInfo.name }}</p>
+                </div>
+
+                <div class="pixel-divider">
+                    <span class="dot-ornament">■ ■ ■</span>
+                </div>
+
+                <div class="details-list">
+                    <div class="detail-item">
+                        <span class="pixel-label">MEANING</span>
+                        <div class="pixel-value-box primary">
+                            <p class="meaning-en">{{ nameInfo.meaning_en }}</p>
+                            <div class="meaning-divider"></div>
+                            <p class="meaning-ko">{{ nameInfo.meaning }}</p>
+                        </div>
+                    </div>
+
+                    <div v-if="nameInfo.extra === '1' || nameInfo.extra === 1" class="extra-comment-box">
+                        <p class="comment-text">"세대에 관계없이 꾸준히 사용되고 있는 이름이에요!"</p>
+                    </div>
+                
                 <div class="detail-item">
-                <span class="label">세대 분류</span>
-                <p class="value">{{ nameInfo.generation }}</p>
+                    <span class="pixel-label">MY SAJU STATS</span>
+                    <div class="gauge-container">
+                        <div v-for="(val, key) in nameInfo.fiveElements" :key="key" class="gauge-row">
+                            <span class="gauge-name">{{ key.toUpperCase() }}</span>
+                            <div class="gauge-bar-bg">
+                                <div class="gauge-bar-fill" 
+                                    :style="{ width: val + '%', backgroundColor: getElementColor(key) }">
+                                </div>
+                            </div>
+                            <span class="gauge-val">{{ val }}%</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div v-if="nameInfo.extra" class="detail-item">
-                <span class="label">비고</span>
-                <p class="value text-muted">{{ nameInfo.extra }}</p>
-            </div>
-            </div>
-        </div>
-        </div>
+        <div class="pixel-corner bl"></div>
+        <div class="pixel-corner br"></div>
+    </div>
 
-        <div class="button-group">
-        <button class="btn-home" @click="$router.push('/')">다시 분석하기</button>
-        <button class="btn-share" @click="saveAsImage">이미지 저장</button>
+    <div class="button-group">
+        <button class="btn-pixel-secondary" @click="$router.push('/')">RETRY</button>
+        <button class="btn-pixel-primary" @click="saveAsImage">SAVE IMAGE</button>
+    </div>
+
+        <p class="pixel-footer">© Hyojin Lee</p>
         </div>
     </div>
 
-    <div v-else class="error-container">
-        <div class="error-card">
-        <p>결과 데이터를 찾을 수 없습니다.</p>
-        <button class="btn-retry" @click="$router.push('/')">입력창으로 이동</button>
+    <div v-else class="pixel-container">
+        <div class="pixel-screen">
+            <div class="error-box">
+                <p class="pixel-title">NO DATA</p>
+                <button class="btn-pixel-primary" @click="$router.push('/')">GO HOME</button>
+            </div>
         </div>
     </div>
 </template>
@@ -64,185 +84,230 @@ const nameInfo = ref(null);
 
 onMounted(() => {
     if (history.state && history.state.resultData) {
-        nameInfo.value = history.state.resultData;
+        const data = history.state.resultData;
+        
+        nameInfo.value = {
+            ...data.nameInfo,
+            fiveElements: data.fiveElements
+        };        
     }
 });
 
+const getElementColor = (element) => {
+    const colors = {
+        wood: '#4CAF50', fire: '#FF5252', earth: '#FFD700', metal: '#B0BEC5', water: '#2196F3'
+    };
+    return colors[element.toLowerCase()] || '#000';
+};
+
 const saveAsImage = () => {
-    html2canvas(document.getElementById('saving-image'))
-    .then(canvas => {
-        const link = document.createElement('a')
-        link.download = 'sajuro.png'
-        link.href = canvas.toDataURL()
-        link.click()
-    })
+    const target = document.getElementById('saving-image');
+    html2canvas(target, {
+        backgroundColor: '#efead8',
+        scale: 2
+    }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'my-korean-name-is.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    });
 };
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jersey+10&family=Pixelify+Sans:wght@400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
 
-.result-container {
-    max-width: 450px;
+.pixel-container {
+    max-width: 480px;
     margin: 0 auto;
-    padding: 40px 20px;
-    background-color: #f8f9fd;
     min-height: 100vh;
+    background-color: #bdb595;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
-.header-section {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.badge {
-    background: #6c5ce7;
-    color: white;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.75rem;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
-.title {
-    font-size: 1.4rem;
-    color: #2d3436;
-    margin-top: 10px;
-}
-
-.name-card {
-    background: white;
-    border-radius: 24px;
-    padding: 40px 25px;
-    box-shadow: 0 15px 35px rgba(108, 92, 231, 0.1);
+.pixel-screen {
     position: relative;
-    overflow: hidden;
-}
-
-.card-top {
+    width: 100%;
+    background-color: #efead8;
+    border: 8px solid #000;
+    box-shadow: 0 0 0 4px #fff inset, 10px 10px 0px rgba(0,0,0,0.2);
+    padding: 60px 20px 30px;
     text-align: center;
-    margin-bottom: 20px;
 }
 
-.pronunciation {
-    color: #a29bfe;
-    font-size: 1rem;
+.result-card-pixel {
+    position: relative;
+    background-color: #fdfcf7;
+    border: 4px solid #000;
+    padding: 40px 20px;
+    margin-bottom: 30px;
+    box-shadow: 8px 8px 0px rgba(0,0,0,0.1);
+}
+
+.pixel-corner {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 4px solid #a64452;
+}
+.tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+.tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+.bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+.br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+.pixel-title {
+    font-family: 'Jersey 10';
+    font-size: 2rem;
+    color: #000;
+    margin: 0;
+}
+
+.pixel-subtitle-ko {
+    font-family: 'Noto Sans KR';
+    font-size: 0.75rem;
+    color: #a64452;
+    font-weight: bold;
+}
+
+.name-display-area { margin: 25px 0; }
+
+.pixel-pronunciation {
+    font-family: 'Jersey 10';
+    font-size: 1.2rem;
+    color: #938a67;
     letter-spacing: 4px;
-    text-transform: uppercase;
+}
+
+.hanja-main {
+    font-family: 'Noto Serif KR';
+    font-size: 3rem;
+    font-weight: 900;
+    color: #000;
+    margin: 5px 0;
+}
+
+.hangeul-main {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.pixel-divider {
+    margin: 25px 0;
+    border-top: 2px solid #000;
+    position: relative;
+}
+
+.dot-ornament {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fdfcf7;
+    padding: 0 10px;
+    font-size: 0.5rem;
+    color: #000;
+}
+
+.details-list { text-align: left; }
+
+.pixel-label {
+    display: block;
+    font-family: 'Jersey 10';
+    font-size: 1.1rem;
+    color: #a64452;
     margin-bottom: 5px;
 }
 
-.hanja {
-    font-family: 'Noto Serif KR', serif;
-    font-size: 3.5rem;
-    color: #2d3436;
-    margin: 0;
-}
-
-.hangeul {
-    font-size: 1.2rem;
-    color: #636e72;
-    margin-top: 5px;
-}
-
-.card-divider {
-    display: flex;
-    align-items: center;
-    margin: 30px -25px;
-}
-
-.line {
-    flex: 1;
-    height: 1px;
-    border-top: 2px dashed #f1f2f6;
-}
-
-.circle {
-    width: 20px;
-    height: 20px;
-    background: #f8f9fd;
-    border-radius: 50%;
-}
-.circle.left { margin-left: -10px; }
-.circle.right { margin-right: -10px; }
-
-.details {
-    text-align: left;
-}
-
-.detail-item {
+.pixel-value-box {
+    background: #fff;
+    border: 3px solid #000;
+    padding: 10px;
+    font-family: 'Noto Sans KR';
+    font-size: 0.8rem;
+    box-shadow: 4px 4px 0px #efead8;
     margin-bottom: 20px;
 }
 
-.label {
-    display: block;
+.meaning-en {
+    font-family: 'Pixelify Sans', sans-serif;
     font-size: 0.8rem;
-    color: #b2bec3;
-    margin-bottom: 6px;
+    color: #000;
+    margin-bottom: 8px;
+    line-height: 1.2;
 }
 
-.value {
-    font-size: 1rem;
-    color: #2d3436;
-    line-height: 1.5;
+.meaning-divider {
+    border-top: 1px dashed #ccc;
+    margin: 8px 0;
+}
+
+.meaning-ko {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.65rem;
+    color: #666;
     margin: 0;
-    font-weight: 500;
 }
 
-.value.primary {
-    color: #6c5ce7;
-    font-weight: bold;
+.pixel-value-box.primary {
+    border-left: 8px solid #a64452;
+    padding: 12px;
 }
 
-.grid-details {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
+.extra-comment-box {
+    background: #000;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 2px dashed #fff;
+    outline: 2px solid #000;
 }
 
-.button-group {
-    margin-top: 30px;
-    display: flex;
-    gap: 12px;
-}
-
-.btn-home, .btn-share {
-    flex: 1;
-    padding: 16px;
-    border-radius: 14px;
-    font-weight: bold;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: 0.3s;
-    border: none;
-}
-
-.btn-home {
-    background: #f1f2f6;
-    color: #636e72;
-}
-
-.btn-share {
-    background: #6c5ce7;
-    color: white;
-    box-shadow: 0 8px 20px rgba(108, 92, 231, 0.2);
-}
-
-.btn-share:hover {
-    transform: translateY(-2px);
-    background: #5849d4;
-}
-
-.error-container {
-    padding: 100px 20px;
+.comment-text {
+    font-family: 'Noto Sans KR';
+    font-size: 0.85rem;
+    color: #fff;
+    margin: 0;
     text-align: center;
+    word-break: keep-all;
 }
 
-.error-card {
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+.gauge-container { display: flex; flex-direction: column; gap: 8px; }
+.gauge-row { display: flex; align-items: center; gap: 10px; }
+.gauge-name { font-family: 'Jersey 10'; width: 50px; font-size: 0.9rem; color: #000; }
+.gauge-bar-bg { flex: 1; height: 12px; background: #efead8; border: 2px solid #000; position: relative; }
+.gauge-bar-fill { height: 100%; transition: width 1s ease-out; }
+.gauge-val { font-family: 'Jersey 10'; width: 15px; font-size: 1rem; text-align: right; }
+
+.button-group { display: flex; gap: 10px; margin-top: 20px; }
+.btn-pixel-primary, .btn-pixel-secondary {
+    flex: 1;
+    padding: 7px;
+    font-family: 'Jersey 10';
+    font-size: 1.8rem;
+    border: none;
+    cursor: pointer;
+    box-shadow: -4px 0 0 0 #000, 4px 0 0 0 #000, 0 -4px 0 0 #000, 0 4px 0 0 #000;
 }
+.btn-pixel-primary { background-color: #a64452; color: #fff; }
+.btn-pixel-secondary { background-color: #fff; color: #000; }
+
+.pixel-back-btn {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 30px;
+    height: 30px;
+    background: #fff;
+    border: 3px solid #000;
+    font-family: 'Jersey 10';
+    cursor: pointer;
+    box-shadow: 3px 3px 0 #000;
+}
+
+.pixel-footer { margin-top: 30px; font-family: 'Jersey 10'; font-size: 0.9rem; color: #938a67; }
 </style>
