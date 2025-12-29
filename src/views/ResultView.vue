@@ -20,10 +20,6 @@
                     <p class="hangeul-main">{{ nameInfo.name }}</p>
                 </div>
 
-                <div class="pixel-divider">
-                    <span class="dot-ornament">■ ■ ■</span>
-                </div>
-
                 <div class="details-list">
                     <div class="detail-item">
                         <span class="pixel-label">MEANING</span>
@@ -34,8 +30,8 @@
                         </div>
                     </div>
 
-                    <div v-if="nameInfo.extra === '1' || nameInfo.extra === 1" class="extra-comment-box">
-                        <p class="comment-text">"세대에 관계없이 꾸준히 사용되고 있는 이름이에요!"</p>
+                    <div v-if="nameInfo.extra === '1' || nameInfo.extra === 1 || nameInfo.extra === true" class="extra-comment-box">
+                        <p class="comment-text">세대에 관계없이 꾸준히 사용되고 있는 이름이에요!</p>
                     </div>
                 
                 <div class="detail-item">
@@ -178,14 +174,14 @@ const saveAsImage = () => {
 
 .pixel-pronunciation {
     font-family: 'Jersey 10';
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     color: #938a67;
     letter-spacing: 4px;
 }
 
 .hanja-main {
     font-family: 'Noto Serif KR';
-    font-size: 3rem;
+    font-size: 2.6rem;
     font-weight: 900;
     color: #000;
     margin: 5px 0;
@@ -197,23 +193,6 @@ const saveAsImage = () => {
     color: #333;
 }
 
-.pixel-divider {
-    margin: 25px 0;
-    border-top: 2px solid #000;
-    position: relative;
-}
-
-.dot-ornament {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #fdfcf7;
-    padding: 0 10px;
-    font-size: 0.5rem;
-    color: #000;
-}
-
 .details-list { text-align: left; }
 
 .pixel-label {
@@ -222,6 +201,7 @@ const saveAsImage = () => {
     font-size: 1.1rem;
     color: #a64452;
     margin-bottom: 5px;
+    margin-top: 20px;
 }
 
 .pixel-value-box {
@@ -231,7 +211,7 @@ const saveAsImage = () => {
     font-family: 'Noto Sans KR';
     font-size: 0.8rem;
     box-shadow: 4px 4px 0px #efead8;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
 }
 
 .meaning-en {
@@ -260,28 +240,55 @@ const saveAsImage = () => {
 }
 
 .extra-comment-box {
-    background: #000;
     padding: 12px;
-    margin-bottom: 20px;
-    border: 2px dashed #fff;
-    outline: 2px solid #000;
+    margin-bottom: 10px;
+    text-align: center;
 }
 
 .comment-text {
-    font-family: 'Noto Sans KR';
-    font-size: 0.85rem;
-    color: #fff;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.7rem;
+    color: #666;
     margin: 0;
-    text-align: center;
-    word-break: keep-all;
 }
 
-.gauge-container { display: flex; flex-direction: column; gap: 8px; }
-.gauge-row { display: flex; align-items: center; gap: 10px; }
-.gauge-name { font-family: 'Jersey 10'; width: 50px; font-size: 0.9rem; color: #000; }
-.gauge-bar-bg { flex: 1; height: 12px; background: #efead8; border: 2px solid #000; position: relative; }
-.gauge-bar-fill { height: 100%; transition: width 1s ease-out; }
-.gauge-val { font-family: 'Jersey 10'; width: 15px; font-size: 1rem; text-align: right; }
+.gauge-container { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 5px; 
+}
+
+.gauge-row { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+}
+
+.gauge-name { 
+    font-family: 'Jersey 10'; 
+    width: 50px; 
+    font-size: 0.9rem; 
+    color: #000; 
+}
+
+.gauge-bar-bg { 
+    flex: 1; 
+    height: 12px; 
+    background: #efead8; 
+    border: 2px solid #000; 
+    position: relative; 
+}
+
+.gauge-bar-fill { 
+    height: 100%; 
+    transition: width 1s ease-out; 
+}
+
+.gauge-val { 
+    font-family: 'Jersey 10'; 
+    width: 15px; font-size: 1rem; 
+    text-align: right; 
+}
 
 .button-group { display: flex; gap: 10px; margin-top: 20px; }
 .btn-pixel-primary, .btn-pixel-secondary {
