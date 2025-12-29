@@ -30,12 +30,13 @@
                         </div>
                     </div>
 
-                    <div v-if="nameInfo.extra === '1' || nameInfo.extra === 1 || nameInfo.extra === true" class="extra-comment-box">
-                        <p class="comment-text">세대에 관계없이 꾸준히 사용되고 있는 이름이에요!</p>
+                    <div v-if="nameInfo.extra" class="extra-comment-box">
+                        <p class="comment-text-en">"A timeless name loved across generations."</p>
+                        <p class="comment-text-ko">세대에 관계없이 꾸준히 사용되고 있는 이름이에요!</p>
                     </div>
                 
                 <div class="detail-item">
-                    <span class="pixel-label">MY SAJU STATS</span>
+                    <span class="pixel-label">MY FIVE ELEMENTS STATS</span>
                     <div class="gauge-container">
                         <div v-for="(val, key) in nameInfo.fiveElements" :key="key" class="gauge-row">
                             <span class="gauge-name">{{ key.toUpperCase() }}</span>
@@ -240,15 +241,24 @@ const saveAsImage = () => {
 }
 
 .extra-comment-box {
-    padding: 12px;
-    margin-bottom: 10px;
+    padding: 10px;
+    margin-bottom: 15px;
     text-align: center;
+
 }
 
-.comment-text {
+.comment-text-en {
+    font-family: 'Pixelify Sans', sans-serif;
+    font-size: 0.75rem;
+    color: #a64452;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+.comment-text-ko {
     font-family: 'Noto Sans KR', sans-serif;
-    font-size: 0.7rem;
-    color: #666;
+    font-size: 0.65rem;
+    color: #888;
     margin: 0;
 }
 
