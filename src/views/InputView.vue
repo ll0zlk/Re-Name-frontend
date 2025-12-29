@@ -105,7 +105,7 @@ async function submit() {
   }
 
   try {
-    const response = await axios.post('http://localhost:8000/api/saju/filter', {
+    const response = await axios.post('https://is-that-my-name.onrender.com/api/saju/filter', {
       birthDateTime: birthDateTime,
       gender: gender.value,
       keywords: []
