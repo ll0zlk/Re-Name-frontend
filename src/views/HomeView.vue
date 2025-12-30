@@ -76,14 +76,23 @@ const showInfo = ref(false);
   box-shadow: 0 0 0 4px #fff inset, 10px 10px 0px rgba(0,0,0,0.2);
   padding: 60px 20px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .pixel-info-btn {
   position: absolute;
   top: 15px;
   right: 15px;
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   background-color: #fff;
   border: 3px solid #000;
   font-family: 'Jersey 10';
@@ -119,7 +128,7 @@ const showInfo = ref(false);
 
 .pixel-logo {
   font-family: 'Jersey 10';
-  font-size: 3.5rem;
+  font-size: clamp(2rem, 12vw, 3.5rem);
   color: #000;
   margin: 10px 0 70px 0;
   line-height: 1;
@@ -220,7 +229,7 @@ const showInfo = ref(false);
 }
 
 .pixel-footer {
-  margin-top: 70px;
+  margin-top: auto;
   font-family: 'Jersey 10';
   font-size: 0.9rem;
   color: #938a67;
