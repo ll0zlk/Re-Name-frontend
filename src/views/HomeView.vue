@@ -234,4 +234,20 @@ const showInfo = ref(false);
   font-size: 0.9rem;
   color: #938a67;
 }
+
+@media (max-width: 480px) {
+  .pixel-logo {
+    margin-bottom: 20px; 
+    font-size: 2.2rem;
+  }
+
+  .pixel-icon {
+    margin: 10px 0; 
+    font-size: 3rem;
+  }
+  
+  .pixel-sub {
+    margin-top: 20px;
+  }
+}
 </style>
