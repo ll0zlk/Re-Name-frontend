@@ -1,7 +1,7 @@
 <template>
   <div class="pixel-container">
     <div class="pixel-screen">
-      <button class="pixel-back-btn" @click="$router.push('/')">◀</button>
+      <button class="pixel-back-btn" @click="$router.push('/')">◀&#xFE0E;</button>
 
       <div class="form-card">
         <h2 class="pixel-title">ENTER INFO</h2>

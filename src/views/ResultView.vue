@@ -1,8 +1,6 @@
 <template>
     <div class="pixel-container" v-if="nameInfo">
         <div class="pixel-screen">
-            <button class="pixel-back-btn" @click="$router.push('/input')">◀</button>
-
             <div id="saving-image" class="result-card-pixel">
                 <div class="pixel-corner tl"></div>
                 <div class="pixel-corner tr"></div>
@@ -312,19 +310,6 @@ const saveAsImage = () => {
 }
 .btn-pixel-primary { background-color: #a64452; color: #fff; }
 .btn-pixel-secondary { background-color: #fff; color: #000; }
-
-.pixel-back-btn {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    width: 30px;
-    height: 30px;
-    background: #fff;
-    border: 3px solid #000;
-    font-family: 'Jersey 10';
-    cursor: pointer;
-    box-shadow: 3px 3px 0 #000;
-}
 
 .pixel-footer { margin-top: 30px; font-family: 'Jersey 10'; font-size: 0.9rem; color: #938a67; }
 </style>
