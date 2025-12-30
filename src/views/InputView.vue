@@ -10,9 +10,27 @@
         <div class="input-group">
           <label class="pixel-label">BIRTH DATE</label>
           <div class="birth-inputs">
-            <input v-model="year" type="number" placeholder="YYYY" class="pixel-input" />
-            <input v-model="month" type="number" placeholder="MM" class="pixel-input" />
-            <input v-model="day" type="number" placeholder="DD" class="pixel-input" />
+            <input 
+              v-model="year" 
+              type="number" 
+              oninput="javascript: if (this.value.length > 4) this.value = this.value.slice(0, 4);" 
+              placeholder="YYYY" 
+              class="pixel-input" 
+            />
+            <input 
+              v-model="month" 
+              type="number" 
+              oninput="javascript: if (this.value.length > 2) this.value = this.value.slice(0, 2);" 
+              placeholder="MM" 
+              class="pixel-input" 
+            />
+            <input 
+              v-model="day" 
+              type="number" 
+              oninput="javascript: if (this.value.length > 2) this.value = this.value.slice(0, 2);" 
+              placeholder="DD" 
+              class="pixel-input" 
+            />
           </div>
         </div>
 
@@ -87,9 +105,36 @@ const branchHourMap = {
   오: '12:30', 미: '14:30', 신: '16:30', 유: '18:30', 술: '20:30', 해: '22:30'
 }
 
+const validateDate = () => {
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().getMonth() + 1;
+  const currentDay = new Date().getDate();
+
+  const y = parseInt(year.value);
+  const m = parseInt(month.value);
+  const d = parseInt(day.value);
+
+  if (y > currentYear || y < 1900) return false;
+  if (m < 1 || m > 12) return false;
+  if (y === currentYear) {
+    if (m > currentMonth) return false;
+    if (m === currentMonth && d > currentDay) return false;
+  }
+
+  const lastDay = new Date(y,m,0).getDate();
+
+  if (d < 1 || d > lastDay) return false;
+
+  return true;
+};
+
 async function submit() {
   if (!year.value || !month.value || !day.value || !branch.value) {
-    alert('Please enter all dates.'); 
+    alert('Please enter all info😢');
+    return;
+  }
+  if (!validateDate()) {
+    alert('Please check your birthdate again🫢')
     return;
   }
   loading.value = true;
@@ -107,8 +152,7 @@ async function submit() {
   try {
     const response = await axios.post('https://is-that-my-name.onrender.com/api/saju/filter', {
       birthDateTime: birthDateTime,
-      gender: gender.value,
-      keywords: []
+      gender: gender.value
     });
 
     router.push({
