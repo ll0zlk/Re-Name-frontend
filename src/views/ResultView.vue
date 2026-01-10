@@ -33,7 +33,7 @@
                         <p class="comment-text-ko">세대에 관계없이 꾸준히 사용되고 있는 이름이에요!</p>
                     </div>
 
-                    <div v-if="nameInfo.name === '효진'" class="dev-name-badge">
+                    <div v-if="nameInfo.name === '효진'" class="extra-comment-box">
                         <p class="comment-text-en">"Same name as the developer!"</p>
                         <p class="comment-text-ko">개발자와 같은 이름이에요!</p>
                     </div>
