@@ -83,6 +83,7 @@ import html2canvas from 'html2canvas';
 const nameInfo = ref(null);
 
 onMounted(() => {
+    console.log("test")
     if (history.state && history.state.resultData) {
         const data = history.state.resultData;
         console.log(data.nameInfo.name);
