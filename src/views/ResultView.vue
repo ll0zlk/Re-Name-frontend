@@ -85,6 +85,7 @@ const nameInfo = ref(null);
 onMounted(() => {
     if (history.state && history.state.resultData) {
         const data = history.state.resultData;
+        console.log(data.nameInfo.name);
         
         nameInfo.value = {
             ...data.nameInfo,
