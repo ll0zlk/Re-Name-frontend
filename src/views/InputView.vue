@@ -150,7 +150,7 @@ async function submit() {
   }
 
   try {
-    const response = await axios.post('https://is-that-my-name.onrender.com/api/saju/filter', {
+    const response = await axios.post('https://re-name-backend-production.up.railway.app/api/saju/filter', {
       birthDateTime: birthDateTime,
       gender: gender.value
     });
