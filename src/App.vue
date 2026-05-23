@@ -14,7 +14,7 @@ import { onMounted } from 'vue';
 import axios from 'axios';
 
 onMounted(() => {
-  axios.get('https://is-that-my-name.onrender.com/api/saju/health')
+  axios.get('https://re-name-backend.railway.internal/api/saju/health')
     .catch(() => {
       console.log("Wake-up signal sent to server.");
     });
