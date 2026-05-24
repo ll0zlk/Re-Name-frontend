@@ -6,7 +6,7 @@
       </button>
 
       <div class="content">
-        <p class="pixel-sub">GET YOUR KOREAN NAME</p>
+        <p class="pixel-sub">AUTHENTIC KOREAN NAME GENERATOR</p>
         <h1 class="pixel-logo">Is that my name?</h1>
         
         <div class="pixel-icon">🏮</div>
