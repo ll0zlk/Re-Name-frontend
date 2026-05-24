@@ -18,7 +18,12 @@
         </div>
       </div>
       
-      <p class="pixel-footer">© Hyojin Lee</p>
+      <div class="pixel-footer-wrapper">
+        <p class="pixel-footer">© Hyojin Lee</p>
+        <p class="seo-hidden-text">
+          Is That My Name is a personalized Korean name generator. Discover your authentic Korean name based on Eastern Astrology, Saju birth chart analysis, and real generation naming trends.
+        </p>
+      </div>
 
       <div v-if="showInfo" class="pixel-modal-overlay" @click.self="showInfo = false">
         <div class="pixel-modal">
@@ -233,6 +238,18 @@ const showInfo = ref(false);
   font-family: 'Jersey 10';
   font-size: 0.9rem;
   color: #938a67;
+}
+
+.seo-hidden-text {
+  font-size: 0.5rem;
+  color: #ebe5d2; 
+  margin: 0;
+  line-height: 1;
+  text-align: center;
+  word-break: break-all;
+  max-width: 90%;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 @media (max-width: 480px) {
