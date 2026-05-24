@@ -141,7 +141,7 @@ const showInfo = ref(false);
 
 .pixel-icon {
   font-size: 4rem;
-  margin: 40px 0;
+  margin: 0 0 30px 0;
   animation: bounce 1s infinite;
 }
 
