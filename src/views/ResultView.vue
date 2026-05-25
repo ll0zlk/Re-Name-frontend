@@ -385,7 +385,6 @@ const saveAsImage = () => {
 }
 
 .gauge-name { 
-    font-family: 'Jersey 10' !important; 
     width: 75px; 
     font-size: 0.9rem; 
     color: #000; 
@@ -393,6 +392,10 @@ const saveAsImage = () => {
     align-items: center;
     gap: 4px;
     flex-shrink: 0;
+}
+
+.name-text {
+    font-family: 'Jersey 10', sans-serif !important;
 }
 
 .gauge-bar-bg { 
