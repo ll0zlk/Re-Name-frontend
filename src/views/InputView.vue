@@ -13,21 +13,21 @@
             <input 
               v-model="year" 
               type="number" 
-              @input="handleDateInput({ value: year }, 4, monthInput)"
+              @input="handleDateInput($event, 4, monthInput)"
               placeholder="YYYY" 
               class="pixel-input" 
             />
             <input 
               v-model="month" 
               type="number" 
-              @input="handleDateInput({ value: month }, 2, dayInput)"
+              @input="handleDateInput($event, 2, dayInput)"
               placeholder="MM" 
               class="pixel-input" 
             />
             <input 
               v-model="day" 
               type="number" 
-              @input="handleDateInput({ value: day }, 2, null)"
+              @input="handleDateInput($event, 2, null)"
               placeholder="DD" 
               class="pixel-input" 
             />
@@ -86,12 +86,19 @@ const branch = ref('')
 const monthInput = ref(null)
 const dayInput = ref(null)
 
-const handleDateInput = (current, maxLength, nextInput) => {
-  if (current.value && String(current.value).length > maxLength) {
-    current.value = parseInt(String(current.value).slice(0, maxLength));
+const handleDateInput = (event, maxLength, nextInputRef) => {
+  const inputEl = event.target;
+  
+  if (inputEl.value.length > maxLength) {
+    inputEl.value = inputEl.value.slice(0, maxLength);
   }
-  if (String(current.value).length === maxLength && nextInput) {
-    nextInput.value.focus();
+  
+  if (maxLength === 4) year.value = inputEl.value;
+  if (maxLength === 2 && inputEl.placeholder === 'MM') month.value = inputEl.value;
+  if (maxLength === 2 && inputEl.placeholder === 'DD') day.value = inputEl.value;
+
+  if (inputEl.value.length === maxLength && nextInputRef) {
+    nextInputRef.focus();
   }
 }
 
