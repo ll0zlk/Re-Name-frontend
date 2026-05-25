@@ -19,7 +19,7 @@
                                 :key="index" 
                                 class="hanja-item"
                             >
-                                <h1 class="hanja-char" :style="{ color: getHanjaColor(index) }">
+                                <h1 class="hanja-char">
                                     {{ char }}
                                 </h1>
                                 <div class="hanja-element-bar" :style="{ backgroundColor: getHanjaColor(index) }">
@@ -254,7 +254,6 @@ const saveAsImage = () => {
 .hanja-element-bar {
     width: 36px;
     height: 3px;
-    border: 2px solid #000;
 }
 
 .hangeul-main {
