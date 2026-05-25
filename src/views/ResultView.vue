@@ -195,6 +195,7 @@ const saveAsImage = () => {
 @import url('https://fonts.googleapis.com/css2?family=Jersey+10&family=Pixelify+Sans:wght@400..700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap');
 
 .pixel-container {
     max-width: 480px;
@@ -443,8 +444,8 @@ const saveAsImage = () => {
     position: absolute;
     bottom: 22px;
     left: 50%;
-    transform: translateX(-20%);
-    width: 180px;
+    transform: translateX(-10%);
+    width: 160px;
     background-color: rgba(255, 255, 255, 0.92);
     border: 3px solid #000;
     padding: 8px;
@@ -467,10 +468,9 @@ const saveAsImage = () => {
 }
 
 .tooltip-en {
-    font-family: 'Pixelify Sans', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
     font-size: 0.65rem;
     color: #000;
-    line-height: 1.3;
     margin: 0;
     word-break: keep-all;
 }
