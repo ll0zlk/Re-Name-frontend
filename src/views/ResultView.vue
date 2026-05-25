@@ -54,7 +54,7 @@
                     <span class="pixel-label">MY FIVE ELEMENTS STATS</span>
                     <div class="gauge-container">
                         <div v-for="(val, key) in nameInfo.fiveElements" :key="key" class="gauge-row">
-                            <span class="gauge-name" :class="{ 'highlight-text': isLowestElement(key) }">
+                            <span class="gauge-name">
                                 <span class="name-text">{{ key.toUpperCase() }}</span>
                                 
                                 <span 
@@ -385,7 +385,7 @@ const saveAsImage = () => {
 }
 
 .gauge-name { 
-    font-family: 'Jersey 10'; 
+    font-family: 'Jersey 10' !important; 
     width: 75px; 
     font-size: 0.9rem; 
     color: #000; 
@@ -414,12 +414,6 @@ const saveAsImage = () => {
     text-align: right; 
 }
 
-.highlight-text {
-    font-family: 'Jersey 10', sans-serif;
-    color: #a64452 !important;
-    font-weight: bold;
-}
-
 .pixel-alert {
     position: relative;
     display: inline-flex;
@@ -437,6 +431,7 @@ const saveAsImage = () => {
     vertical-align: middle;
     border: 2px solid #000;
     box-shadow: 1px 1px 0px rgba(0,0,0,0.2);
+    margin: 0;
 }
 
 .pixel-tooltip-box {
