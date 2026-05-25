@@ -443,7 +443,7 @@ const saveAsImage = () => {
     position: absolute;
     bottom: 22px;
     left: 50%;
-    transform: translateX(-10%);
+    transform: translateX(-14%);
     width: 160px;
     background-color: rgba(255, 255, 255, 0.92);
     border: 3px solid #000;
