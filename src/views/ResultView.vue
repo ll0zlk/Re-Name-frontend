@@ -415,6 +415,7 @@ const saveAsImage = () => {
 }
 
 .highlight-text {
+    font-family: 'Jersey 10', sans-serif;
     color: #a64452 !important;
     font-weight: bold;
 }
