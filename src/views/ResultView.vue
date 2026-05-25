@@ -13,9 +13,6 @@
                 <div class="name-display-area">
                     <p class="pixel-pronunciation">{{ nameInfo.pronunciation }}</p>
                     <div class="hanja-box">
-                        <h1 class="hanja-main">{{ nameInfo.hanja }}</h1>
-                    </div>
-                    <div class="hanja-box">
                         <div class="hanja-list">
                             <div 
                                 v-for="(char, index) in nameInfo.hanja.split('')" 
@@ -25,8 +22,7 @@
                                 <h1 class="hanja-char" :style="{ color: getHanjaColor(index) }">
                                     {{ char }}
                                 </h1>
-                                <div class="hanja-element-badge" :style="{ backgroundColor: getHanjaColor(index) }">
-                                    {{ getHanjaElementName(index) }}
+                                <div class="hanja-element-bar" :style="{ backgroundColor: getHanjaColor(index) }">
                                 </div>
                             </div>
                         </div>
@@ -101,7 +97,11 @@ const nameInfo = ref(null);
 onMounted(() => {
     if (history.state && history.state.resultData) {
         const data = history.state.resultData;
+        console.log("전체 전달 데이터:", data);
+        console.log("nameInfo 데이터:", data.nameInfo);
+
         const elementsArray = data.nameInfo.elements ? data.nameInfo.elements.split(',') : [];
+        console.log("파싱된 오행 배열:", elementsArray);
 
         nameInfo.value = {
             ...data.nameInfo,
@@ -224,14 +224,14 @@ const saveAsImage = () => {
 }
 
 .hanja-box {
-    margin: 15px 0;
+    margin: 10px 0;
     display: flex;
     justify-content: center;
 }
 
 .hanja-list {
     display: flex;
-    gap: 20px;
+    gap: 0px;
     justify-content: center;
 }
 
@@ -239,7 +239,7 @@ const saveAsImage = () => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
 }
 
 .hanja-char {
@@ -251,17 +251,10 @@ const saveAsImage = () => {
     text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
 }
 
-.hanja-element-badge {
-    font-family: 'Noto Sans KR';
-    font-size: 0.65rem;
-    color: #fff;
-    font-weight: bold;
-    padding: 2px 8px;
+.hanja-element-bar {
+    width: 36px;
+    height: 3px;
     border: 2px solid #000;
-    box-shadow: 2px 2px 0px rgba(0,0,0,0.15);
-    border-radius: 0px;
-    min-width: 32px;
-    text-align: center;
 }
 
 .hangeul-main {
