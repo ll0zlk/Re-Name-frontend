@@ -54,10 +54,12 @@
                     <span class="pixel-label">MY FIVE ELEMENTS STATS</span>
                     <div class="gauge-container">
                         <div v-for="(val, key) in nameInfo.fiveElements" :key="key" class="gauge-row">
-                            <span class="gauge-name" :class="{ 'highlight-text': isLowestElement(key) }">{{ key.toUpperCase() }}
-                                <span
-                                    v-if="isLowestElement(key)"
-                                    class="pixel-alert-burst"
+                            <span class="gauge-name" :class="{ 'highlight-text': isLowestElement(key) }">
+                                <span class="name-text">{{ key.toUpperCase() }}</span>
+                                
+                                <span 
+                                    v-if="isLowestElement(key)" 
+                                    class="pixel-alert"
                                     @click.stop="showTooltip(key)"
                                 >
                                     !
@@ -66,6 +68,7 @@
                                     </div>
                                 </span>
                             </span>
+                            
                             <div class="gauge-bar-bg">
                                 <div class="gauge-bar-fill" 
                                     :style="{ width: val + '%', backgroundColor: getElementColor(key) }">
@@ -378,13 +381,18 @@ const saveAsImage = () => {
     display: flex; 
     align-items: center; 
     gap: 10px; 
+    position: relative;
 }
 
 .gauge-name { 
     font-family: 'Jersey 10'; 
-    width: 50px; 
+    width: 75px; 
     font-size: 0.9rem; 
     color: #000; 
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
 }
 
 .gauge-bar-bg { 
@@ -411,7 +419,7 @@ const saveAsImage = () => {
     font-weight: bold;
 }
 
-.pixel-alert-burst {
+.pixel-alert {
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -428,16 +436,6 @@ const saveAsImage = () => {
     vertical-align: middle;
     border: 2px solid #000;
     box-shadow: 1px 1px 0px rgba(0,0,0,0.2);
-}
-
-.pixel-alert-burst::before {
-    content: '';
-    position: absolute;
-    top: -2px; left: -2px; right: -2px; bottom: -2px;
-    border: 2px solid #000;
-    transform: rotate(45deg);
-    z-index: -1;
-    background: #a64452;
 }
 
 .pixel-tooltip-box {
