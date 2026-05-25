@@ -54,7 +54,18 @@
                     <span class="pixel-label">MY FIVE ELEMENTS STATS</span>
                     <div class="gauge-container">
                         <div v-for="(val, key) in nameInfo.fiveElements" :key="key" class="gauge-row">
-                            <span class="gauge-name">{{ key.toUpperCase() }}</span>
+                            <span class="gauge-name" :class="{ 'highlight-text': isLowestElement(key) }">{{ key.toUpperCase() }}
+                                <span
+                                    v-if="isLowestElement(key)"
+                                    class="pixel-alert-burst"
+                                    @click.stop="showTooltip(key)"
+                                >
+                                    !
+                                    <div v-if="activeTooltip === key" class="pixel-tooltip-box">
+                                        <p class="tooltip-en">This is your most deficient element. Names with this element are highly recommended!</p>
+                                    </div>
+                                </span>
+                            </span>
                             <div class="gauge-bar-bg">
                                 <div class="gauge-bar-fill" 
                                     :style="{ width: val + '%', backgroundColor: getElementColor(key) }">
@@ -89,12 +100,34 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, onBeforeUnmount } from 'vue';
 import html2canvas from 'html2canvas';
 
 const nameInfo = ref(null);
+const activeTooltip = ref(null);
+
+const isLowestElement = (key) => {
+    if (!nameInfo.value || !nameInfo.value.fiveElements) return false;
+    const values = Object.values(nameInfo.value.fiveElements);
+    const minVal = Math.min(...values);
+    return nameInfo.value.fiveElements[key] === minVal;
+};
+
+const showTooltip = (key) => {
+    if (activeTooltip.value === key) {
+        activeTooltip.value = null;
+    } else {
+        activeTooltip.value = key;
+    }
+};
+
+const closeTooltipGlobal = () => {
+    activeTooltip.value = null;
+};
 
 onMounted(() => {
+    window.addEventListener('click', closeTooltipGlobal);
+    
     if (history.state && history.state.resultData) {
         const data = history.state.resultData;
         console.log("전체 전달 데이터:", data);
@@ -109,6 +142,10 @@ onMounted(() => {
             elementsList: elementsArray
         };        
     }
+});
+
+onBeforeUnmount(() => {
+    window.removeEventListener('click', closeTooltipGlobal)
 });
 
 const getElementColor = (element) => {
@@ -366,6 +403,76 @@ const saveAsImage = () => {
     font-family: 'Jersey 10'; 
     width: 15px; font-size: 1rem; 
     text-align: right; 
+}
+
+.highlight-text {
+    color: #a64452 !important;
+    font-weight: bold;
+}
+
+.pixel-alert-burst {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    background: #a64452;
+    color: #fff;
+    font-family: 'Jersey 10', sans-serif;
+    font-size: 0.75rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 4px;
+    vertical-align: middle;
+    border: 2px solid #000;
+    box-shadow: 1px 1px 0px rgba(0,0,0,0.2);
+}
+
+.pixel-alert-burst::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    border: 2px solid #000;
+    transform: rotate(45deg);
+    z-index: -1;
+    background: #a64452;
+}
+
+.pixel-tooltip-box {
+    position: absolute;
+    bottom: 22px;
+    left: 50%;
+    transform: translateX(-20%);
+    width: 180px;
+    background-color: rgba(255, 255, 255, 0.92);
+    border: 3px solid #000;
+    padding: 8px;
+    z-index: 999;
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.15);
+    text-align: left;
+    pointer-events: none;
+}
+
+.pixel-tooltip-box::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 15px;
+    border-width: 5px 5px 0;
+    border-style: solid;
+    border-color: #000 transparent;
+    display: block;
+    width: 0;
+}
+
+.tooltip-en {
+    font-family: 'Pixelify Sans', sans-serif;
+    font-size: 0.65rem;
+    color: #000;
+    line-height: 1.3;
+    margin: 0;
+    word-break: keep-all;
 }
 
 .button-group { display: flex; gap: 10px; margin-top: 20px; }
