@@ -13,7 +13,8 @@
             <input 
               id="year"
               v-model="year" 
-              type="number" 
+              type="text"
+              inputmode="numeric" 
               @input="moveFocus($event.target, 'month', 4)"
               placeholder="YYYY" 
               class="pixel-input" 
@@ -21,7 +22,8 @@
             <input 
               id="month"
               v-model="month" 
-              type="number" 
+              type="text"
+              inputmode="numeric" 
               @input="moveFocus($event.target, 'day', 2)"
               placeholder="MM" 
               class="pixel-input" 
@@ -29,7 +31,8 @@
             <input 
               id="day"
               v-model="day" 
-              type="number" 
+              type="text"
+              inputmode="numeric" 
               @input="moveFocus($event.target, null, 2)"
               placeholder="DD" 
               class="pixel-input" 
@@ -87,6 +90,8 @@ const day = ref('')
 const branch = ref('')
 
 const moveFocus = (currentInput, nextFieldId, maxLength) => {
+  currentInput.value = currentInput.value.replace(/[^0-9]/g, '');
+  
   if (currentInput.value.length > maxLength) {
     currentInput.value = currentInput.value.slice(0, maxLength);
     
