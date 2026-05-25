@@ -13,21 +13,21 @@
             <input 
               v-model="year" 
               type="number" 
-              oninput="javascript: if (this.value.length > 4) this.value = this.value.slice(0, 4);" 
+              @input="handleDateInput({ value: year }, 4, monthInput)"
               placeholder="YYYY" 
               class="pixel-input" 
             />
             <input 
               v-model="month" 
               type="number" 
-              oninput="javascript: if (this.value.length > 2) this.value = this.value.slice(0, 2);" 
+              @input="handleDateInput({ value: month }, 2, dayInput)"
               placeholder="MM" 
               class="pixel-input" 
             />
             <input 
               v-model="day" 
               type="number" 
-              oninput="javascript: if (this.value.length > 2) this.value = this.value.slice(0, 2);" 
+              @input="handleDateInput({ value: day }, 2, null)"
               placeholder="DD" 
               class="pixel-input" 
             />
@@ -82,6 +82,18 @@ const year = ref('')
 const month = ref('')
 const day = ref('')
 const branch = ref('')
+
+const monthInput = ref(null)
+const dayInput = ref(null)
+
+const handleDateInput = (current, maxLength, nextInput) => {
+  if (current.value && String(current.value).length > maxLength) {
+    current.value = parseInt(String(current.value).slice(0, maxLength));
+  }
+  if (String(current.value).length === maxLength && nextInput) {
+    nextInput.value.focus();
+  }
+}
 
 const branches = [
   { label: 'Select your birth time', key: ''},
