@@ -15,6 +15,22 @@
                     <div class="hanja-box">
                         <h1 class="hanja-main">{{ nameInfo.hanja }}</h1>
                     </div>
+                    <div class="hanja-box">
+                        <div class="hanja-list">
+                            <div 
+                                v-for="(char, index) in nameInfo.hanja.split('')" 
+                                :key="index" 
+                                class="hanja-item"
+                            >
+                                <h1 class="hanja-char" :style="{ color: getHanjaColor(index) }">
+                                    {{ char }}
+                                </h1>
+                                <div class="hanja-element-badge" :style="{ backgroundColor: getHanjaColor(index) }">
+                                    {{ getHanjaElementName(index) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <p class="hangeul-main">{{ nameInfo.name }}</p>
                 </div>
 
@@ -85,10 +101,12 @@ const nameInfo = ref(null);
 onMounted(() => {
     if (history.state && history.state.resultData) {
         const data = history.state.resultData;
-        
+        const elementsArray = data.nameInfo.elements ? data.nameInfo.elements.split(',') : [];
+
         nameInfo.value = {
             ...data.nameInfo,
-            fiveElements: data.fiveElements
+            fiveElements: data.fiveElements,
+            elementsList: elementsArray
         };        
     }
 });
@@ -98,6 +116,28 @@ const getElementColor = (element) => {
         wood: '#4CAF50', fire: '#FF5252', earth: '#FFD700', metal: '#B0BEC5', water: '#2196F3'
     };
     return colors[element.toLowerCase()] || '#000';
+};
+
+const elementMap = {
+    '목': 'wood',
+    '화': 'fire',
+    '토': 'earth',
+    '금': 'metal',
+    '수': 'water'
+};
+
+const getHanjaElementName = (index) => {
+    if (!nameInfo.value.elementsList || !nameInfo.value.elementsList[index]) return '';
+    return nameInfo.value.elementsList[index];
+};
+
+const getHanjaColor = (index) => {
+    const elementKo = getHanjaElementName(index);
+    const elementEn = elementMap[elementKo];
+    if (elementEn) {
+        return getElementColor(elementEn);
+    }
+    return '#000';
 };
 
 const saveAsImage = () => {
@@ -183,12 +223,45 @@ const saveAsImage = () => {
     letter-spacing: 4px;
 }
 
-.hanja-main {
+.hanja-box {
+    margin: 15px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.hanja-list {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.hanja-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.hanja-char {
     font-family: 'Noto Serif KR';
-    font-size: 2.6rem;
+    font-size: 2.8rem;
     font-weight: 900;
-    color: #000;
-    margin: 5px 0;
+    margin: 0;
+    line-height: 1.1;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+}
+
+.hanja-element-badge {
+    font-family: 'Noto Sans KR';
+    font-size: 0.65rem;
+    color: #fff;
+    font-weight: bold;
+    padding: 2px 8px;
+    border: 2px solid #000;
+    box-shadow: 2px 2px 0px rgba(0,0,0,0.15);
+    border-radius: 0px;
+    min-width: 32px;
+    text-align: center;
 }
 
 .hangeul-main {
