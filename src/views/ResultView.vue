@@ -100,7 +100,7 @@ onMounted(() => {
         console.log("전체 전달 데이터:", data);
         console.log("nameInfo 데이터:", data.nameInfo);
 
-        const elementsArray = data.nameInfo.elements ? data.nameInfo.elements.split(',') : [];
+        const elementsArray = data.nameInfo.element ? data.nameInfo.element.split(',') : [];
         console.log("파싱된 오행 배열:", elementsArray);
 
         nameInfo.value = {
