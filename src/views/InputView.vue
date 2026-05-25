@@ -11,23 +11,26 @@
           <label class="pixel-label">BIRTH DATE</label>
           <div class="birth-inputs">
             <input 
+              id="year"
               v-model="year" 
               type="number" 
-              @input="handleDateInput($event, 4, monthInput)"
+              @input="moveFocus($event.target, 'month', 4)"
               placeholder="YYYY" 
               class="pixel-input" 
             />
             <input 
+              id="month"
               v-model="month" 
               type="number" 
-              @input="handleDateInput($event, 2, dayInput)"
+              @input="moveFocus($event.target, 'day', 2)"
               placeholder="MM" 
               class="pixel-input" 
             />
             <input 
+              id="day"
               v-model="day" 
               type="number" 
-              @input="handleDateInput($event, 2, null)"
+              @input="moveFocus($event.target, null, 2)"
               placeholder="DD" 
               class="pixel-input" 
             />
@@ -83,22 +86,20 @@ const month = ref('')
 const day = ref('')
 const branch = ref('')
 
-const monthInput = ref(null)
-const dayInput = ref(null)
-
-const handleDateInput = (event, maxLength, nextInputRef) => {
-  const inputEl = event.target;
-  
-  if (inputEl.value.length > maxLength) {
-    inputEl.value = inputEl.value.slice(0, maxLength);
+const moveFocus = (currentInput, nextFieldId, maxLength) => {
+  if (currentInput.value.length > maxLength) {
+    currentInput.value = currentInput.value.slice(0, maxLength);
+    
+    if (maxLength === 4) year.value = currentInput.value;
+    if (maxLength === 2 && currentInput.id === 'month') month.value = currentInput.value;
+    if (maxLength === 2 && currentInput.id === 'day') day.value = currentInput.value;
   }
-  
-  if (maxLength === 4) year.value = inputEl.value;
-  if (maxLength === 2 && inputEl.placeholder === 'MM') month.value = inputEl.value;
-  if (maxLength === 2 && inputEl.placeholder === 'DD') day.value = inputEl.value;
 
-  if (inputEl.value.length === maxLength && nextInputRef) {
-    nextInputRef.focus();
+  if (currentInput.value.length === maxLength) {
+    const nextField = document.getElementById(nextFieldId);
+    if (nextField) {
+      nextField.focus();
+    }
   }
 }
 
