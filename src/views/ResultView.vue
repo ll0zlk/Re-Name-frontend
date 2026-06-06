@@ -133,11 +133,11 @@ onMounted(() => {
     
     if (history.state && history.state.resultData) {
         const data = history.state.resultData;
-        console.log("전체 전달 데이터:", data);
-        console.log("nameInfo 데이터:", data.nameInfo);
+        // console.log("전체 전달 데이터:", data);
+        // console.log("nameInfo 데이터:", data.nameInfo);
 
         const elementsArray = data.nameInfo.element ? data.nameInfo.element.split(',') : [];
-        console.log("파싱된 오행 배열:", elementsArray);
+        // console.log("파싱된 오행 배열:", elementsArray);
 
         nameInfo.value = {
             ...data.nameInfo,
